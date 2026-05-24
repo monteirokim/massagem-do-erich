@@ -121,45 +121,35 @@ nav {
     align-items: center;
 }
 
+/* Padrão para TODOS os botões do NAV (Início, Sobre, Serviços, Contato) */
 nav a {
     text-decoration: none;
-    color: var(--text);
+    color: rgba(46, 42, 39, 0.6);
+    /* Cor de texto sutil e apagada para os inativos */
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     padding: 10px 18px;
     border-radius: 50px;
-    background: rgba(46, 42, 39, 0.03);
-    border: 1px solid rgba(46, 42, 39, 0.05);
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: rgba(46, 42, 39, 0.02);
+    border: 1px solid rgba(46, 42, 39, 0.08);
+    /* Borda sutil igual à imagem */
+    transition: all 0.3s ease;
 }
 
-/* Estado de Hover Geral */
+/* Estado de Hover */
 nav a:hover {
     color: var(--accent);
     background: rgba(109, 138, 115, 0.08);
     border-color: rgba(109, 138, 115, 0.2);
-    transform: translateY(-1px);
 }
 
-/* BOTÃO ATIVO (Selecionado automaticamente na rolagem) */
+/* BOTÃO ATIVO (Aplica o fundo verde e texto branco para o botão selecionado) */
 nav a.active {
     background-color: var(--accent) !important;
     color: var(--white) !important;
     border-color: var(--accent) !important;
-}
-
-/* Ajuste sutil para o botão de Contato quando não estiver ativo */
-nav a.nav-cta {
-    background-color: var(--text);
-    color: var(--white);
-    border-color: var(--text);
-}
-
-nav a.nav-cta:hover {
-    background-color: var(--accent);
-    border-color: var(--accent);
 }
 
 /* =========================
@@ -493,7 +483,6 @@ footer p {
     section {
         padding: 60px 0;
         scroll-margin-top: 140px;
-        /* Ajustado para a altura do menu mobile */
     }
 
     section h2 {
