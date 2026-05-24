@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fecha outros FAQs abertos
             faqQuestions.forEach(otherQuestion => {
                 if (otherQuestion !== question) {
-                    otherQuestion.nextElementSibling.style.display = 'none';
+                    otherQuestion.nextElementSibling.style.style.display = 'none';
                     otherQuestion.querySelector('.faq-icon').textContent = '+';
                 }
             });
@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section[id], main > section');
     const navLinks = document.querySelectorAll('nav a');
 
-    // Ajusta a margem de detecção dependendo do tamanho da tela (Mobile vs Desktop)
+    // Margens de detecção padrão
     const isMobile = window.innerWidth <= 768;
-    const rootMarginTop = isMobile ? '-35%' : '-20%';
-    const rootMarginBottom = isMobile ? '-45%' : '-60%';
+    const rootMarginTop = isMobile ? '-25%' : '-20%';
+    const rootMarginBottom = isMobile ? '-55%' : '-60%';
 
     const options = {
         root: null,
@@ -46,22 +46,41 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0
     };
 
+    // Função auxiliar para iluminar o botão correto instantaneamente
+    const activateMenuLink = (targetId) => {
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${targetId}`) {
+                link.classList.add('active');
+            }
+        });
+    };
+
     const observer = new IntersectionObserver((entries) => {
+        // Se o usuário colou no fim da página, força o botão Contato sem delay
+        const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50;
+
+        if (scrolledToBottom) {
+            activateMenuLink('contato');
+            return;
+        }
+
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const id = entry.target.getAttribute('id');
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${id}`) {
-                        link.classList.add('active');
-                    }
-                });
+                activateMenuLink(id);
             }
         });
     }, options);
 
     sections.forEach(section => {
         observer.observe(section);
+    });
+
+    // Ouvinte extra de rolagem para garantir sincronia perfeita no fim da página
+    window.addEventListener('scroll', () => {
+        if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50) {
+            activateMenuLink('contato');
+        }
     });
 });
