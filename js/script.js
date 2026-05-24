@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const answer = question.nextElementSibling;
             const icon = question.querySelector('.faq-icon');
 
-            // Fecha outros FAQs abertos (opcional, para organização)
+            // Fecha outros FAQs abertos
             faqQuestions.forEach(otherQuestion => {
                 if (otherQuestion !== question) {
                     otherQuestion.nextElementSibling.style.display = 'none';
@@ -35,10 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section[id], main > section');
     const navLinks = document.querySelectorAll('nav a');
 
+    // Ajusta a margem de detecção dependendo do tamanho da tela (Mobile vs Desktop)
+    const isMobile = window.innerWidth <= 768;
+    const rootMarginTop = isMobile ? '-35%' : '-20%';
+    const rootMarginBottom = isMobile ? '-45%' : '-60%';
+
     const options = {
         root: null,
-        // Define o gatilho quando a seção atinge a parte superior/central do visor
-        rootMargin: '-20% 0px -60% 0px',
+        rootMargin: `${rootMarginTop} 0px ${rootMarginBottom} 0px`,
         threshold: 0
     };
 
