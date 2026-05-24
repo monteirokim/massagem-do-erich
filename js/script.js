@@ -6,24 +6,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const faqQuestions = document.querySelectorAll('.faq-question');
 
     faqQuestions.forEach(question => {
-        question.addEventListener('click', () => {
-            const answer = question.nextElementSibling;
+        question.addEventListener('click', (e) => {
+            // Previne comportamento padrão do botão dentro de formulários se houver
+            e.preventDefault();
+
+            const item = question.closest('.faq-item');
+            const answer = item.querySelector('.faq-answer');
             const icon = question.querySelector('.faq-icon');
 
-            // Fecha outros FAQs abertos
-            faqQuestions.forEach(otherQuestion => {
-                if (otherQuestion !== question) {
-                    otherQuestion.nextElementSibling.style.style.display = 'none';
-                    otherQuestion.querySelector('.faq-icon').textContent = '+';
+            // Fecha outros FAQs que por ventura estejam abertos
+            document.querySelectorAll('.faq-item').forEach(otherItem => {
+                const otherAnswer = otherItem.querySelector('.faq-answer');
+                const otherButton = otherItem.querySelector('.faq-question');
+                const otherIcon = otherItem.querySelector('.faq-icon');
+
+                if (otherItem !== item && otherAnswer.classList.contains('open')) {
+                    otherAnswer.classList.remove('open');
+                    if (otherIcon) otherIcon.textContent = '+';
                 }
             });
 
-            // Abre ou fecha o FAQ clicado
-            if (answer.style.display === 'block') {
-                answer.style.display = 'none';
+            // Liga ou desliga a classe de visualização aberta
+            if (answer.classList.contains('open')) {
+                answer.classList.remove('open');
                 icon.textContent = '+';
             } else {
-                answer.style.display = 'block';
+                answer.classList.add('open');
                 icon.textContent = '−';
             }
         });
@@ -32,21 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 2. MONITOR DINÂMICO DE SEÇÕES (NAV ACTIVE)
     // ==========================================
-    const sections = document.querySelectorAll('section[id], main > section');
+    const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('nav a');
 
-    // Margens de detecção padrão
     const isMobile = window.innerWidth <= 768;
-    const rootMarginTop = isMobile ? '-25%' : '-20%';
-    const rootMarginBottom = isMobile ? '-55%' : '-60%';
-
     const options = {
         root: null,
-        rootMargin: `${rootMarginTop} 0px ${rootMarginBottom} 0px`,
+        rootMargin: isMobile ? '-25% 0px -55% 0px' : '-20% 0px -60% 0px',
         threshold: 0
     };
 
-    // Função auxiliar para iluminar o botão correto instantaneamente
     const activateMenuLink = (targetId) => {
         navLinks.forEach(link => {
             link.classList.remove('active');
@@ -57,8 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const observer = new IntersectionObserver((entries) => {
-        // Se o usuário colou no fim da página, força o botão Contato sem delay
-        const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50;
+        const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 120;
 
         if (scrolledToBottom) {
             activateMenuLink('contato');
@@ -77,9 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 
-    // Ouvinte extra de rolagem para garantir sincronia perfeita no fim da página
     window.addEventListener('scroll', () => {
-        if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50) {
+        if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 120) {
             activateMenuLink('contato');
         }
     });
