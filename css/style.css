@@ -135,6 +135,7 @@ nav a {
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Estado de Hover Geral */
 nav a:hover {
     color: var(--accent);
     background: rgba(109, 138, 115, 0.08);
@@ -142,6 +143,14 @@ nav a:hover {
     transform: translateY(-1px);
 }
 
+/* BOTÃO ATIVO (Selecionado automaticamente na rolagem) */
+nav a.active {
+    background-color: var(--accent) !important;
+    color: var(--white) !important;
+    border-color: var(--accent) !important;
+}
+
+/* Ajuste sutil para o botão de Contato quando não estiver ativo */
 nav a.nav-cta {
     background-color: var(--text);
     color: var(--white);
@@ -150,7 +159,6 @@ nav a.nav-cta {
 
 nav a.nav-cta:hover {
     background-color: var(--accent);
-    color: var(--white);
     border-color: var(--accent);
 }
 
@@ -485,6 +493,7 @@ footer p {
     section {
         padding: 60px 0;
         scroll-margin-top: 140px;
+        /* Ajustado para a altura do menu mobile */
     }
 
     section h2 {

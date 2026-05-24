@@ -1,43 +1,63 @@
-const questions =
-    document.querySelectorAll(".faq-question");
+document.addEventListener('DOMContentLoaded', () => {
 
-questions.forEach((question) => {
+    // ==========================================
+    // 1. SISTEMA DE PERGUNTAS FREQUENTES (FAQ)
+    // ==========================================
+    const faqQuestions = document.querySelectorAll('.faq-question');
 
-    question.addEventListener("click", () => {
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('.faq-icon');
 
-        const answer =
-            question.nextElementSibling;
-
-        const icon =
-            question.querySelector(".faq-icon");
-
-        const isOpen =
-            answer.style.display === "block";
-
-        document
-            .querySelectorAll(".faq-answer")
-            .forEach((item) => {
-
-                item.style.display = "none";
-
+            // Fecha outros FAQs abertos (opcional, para organização)
+            faqQuestions.forEach(otherQuestion => {
+                if (otherQuestion !== question) {
+                    otherQuestion.nextElementSibling.style.display = 'none';
+                    otherQuestion.querySelector('.faq-icon').textContent = '+';
+                }
             });
 
-        document
-            .querySelectorAll(".faq-icon")
-            .forEach((item) => {
-
-                item.textContent = "+";
-
-            });
-
-        if (!isOpen) {
-
-            answer.style.display = "block";
-
-            icon.textContent = "−";
-
-        }
-
+            // Abre ou fecha o FAQ clicado
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.textContent = '+';
+            } else {
+                answer.style.display = 'block';
+                icon.textContent = '−';
+            }
+        });
     });
 
+    // ==========================================
+    // 2. MONITOR DINÂMICO DE SEÇÕES (NAV ACTIVE)
+    // ==========================================
+    const sections = document.querySelectorAll('section[id], main > section');
+    const navLinks = document.querySelectorAll('nav a');
+
+    const options = {
+        root: null,
+        // Define o gatilho quando a seção atinge a parte superior/central do visor
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, options);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
 });
